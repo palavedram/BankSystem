@@ -2,6 +2,7 @@ package com.IronHack.BankSystem.models.users;
 
 import com.IronHack.BankSystem.models.accounts.Account;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,7 @@ public class AccountHolder {
     private Address mailingAddress ;
 
     @OneToMany(mappedBy="accountHolder")
+    @JsonIgnore
     private List<Account> accounts = new ArrayList<>();
 
 }

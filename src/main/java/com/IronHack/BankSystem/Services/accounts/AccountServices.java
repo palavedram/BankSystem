@@ -4,6 +4,8 @@ package com.IronHack.BankSystem.Services.accounts;
 import com.IronHack.BankSystem.Services.accounts.impl.AccountServiceImplement;
 import com.IronHack.BankSystem.models.DTOs.AccountDTO;
 
+import com.IronHack.BankSystem.models.Enum.AcountType;
+import com.IronHack.BankSystem.models.Enum.Status;
 import com.IronHack.BankSystem.models.accounts.*;
 import com.IronHack.BankSystem.models.users.AccountHolder;
 import com.IronHack.BankSystem.repositories.accounts.*;
@@ -38,11 +40,12 @@ public class AccountServices implements AccountServiceImplement {
 
 
     public List<Account> findAll() {
-        return null;
+        return accountRepository.findAll();
     }
 
     public Account findById(Integer id) {
-        return null;
+        return accountRepository.findById(id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
     }
 
 
@@ -52,7 +55,7 @@ public class AccountServices implements AccountServiceImplement {
         AccountHolder accountHolderDB = accountHolderRepository.findById(accountHolderId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "AccountHolder not found"));
 
-        //create account to the account holder
+        //create account with the account holder
         Account newAccount;
             LocalDate now = LocalDate.now();
             LocalDate birthDate = accountHolderDB.getDateOfBirth();
@@ -83,8 +86,10 @@ public class AccountServices implements AccountServiceImplement {
         }
         newAccount.setBalance(BigDecimal.valueOf(accountDTO.getBalance()));
         newAccount.setSecretKey(accountDTO.getSecretKey());
-        //newAccount.setPrimaryOwner(accountHolderDB.getFirstName()+" "+accountHolderDB.getLastName());
+        newAccount.setPrimaryOwner(accountHolderDB.getFirstName()+" "+accountHolderDB.getLastName());
         newAccount.setAccountHolder(accountHolderDB);
+        newAccount.setStatus(Status.ACTIVE);
+        newAccount.setAccountType(AcountType.valueOf(accountDTO.getAccountType().toUpperCase()));
 
         return newAccount;
 

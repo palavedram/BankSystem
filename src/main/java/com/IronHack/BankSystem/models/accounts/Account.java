@@ -5,6 +5,7 @@ import com.IronHack.BankSystem.models.Enum.AcountType;
 import com.IronHack.BankSystem.models.Enum.Status;
 import com.IronHack.BankSystem.models.users.AccountHolder;
 import com.IronHack.BankSystem.models.users.ThirdParty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -52,6 +53,7 @@ public class Account {
 
     @ManyToOne
     @JoinColumn
+    @JsonIgnore
     private AccountHolder accountHolder;
 
 }
