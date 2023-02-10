@@ -17,5 +17,5 @@ import lombok.Setter;
 public class CheckingAccount extends Account {
     private float minimumBalance = 250;
     private float monthlyMaintenanceFee = 12;
-    // Getters and setters ...
+
 }

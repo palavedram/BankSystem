@@ -4,16 +4,16 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-
 
 
 @Setter
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 
 @Entity
-public class StudentChecking extends CheckingAccount {
-    // No additional fields
+public class StudentChecking extends Account {
+    private float minimumBalance = 0;
+    private float monthlyMaintenanceFee = 0;
 }

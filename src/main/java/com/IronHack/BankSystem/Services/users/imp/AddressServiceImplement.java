@@ -1,6 +1,6 @@
 package com.IronHack.BankSystem.Services.users.imp;
 
-import com.IronHack.BankSystem.models.Address;
+import com.IronHack.BankSystem.models.users.Address;
 
 import java.util.List;
 

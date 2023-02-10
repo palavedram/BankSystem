@@ -1,13 +1,15 @@
 package com.IronHack.BankSystem.models.users;
 
 import com.IronHack.BankSystem.models.accounts.Account;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -17,11 +19,22 @@ import java.util.List;
 
 
 @Entity
-public class AccountHolder extends User {
+public class AccountHolder {
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Integer id;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private LocalDate dateOfBirth;
 
+    @OneToOne
+    private Address primaryAddress ;
+    @OneToOne
+    private Address mailingAddress ;
 
-    @OneToMany(mappedBy = "accountHolder") //@MappedBy que indica que la relación entre AccountHolder y Account se define en la clase Account.
-    private List<Account> accounts;
+    @OneToMany(mappedBy="accountHolder")
+    private List<Account> accounts = new ArrayList<>();
 
 }
 

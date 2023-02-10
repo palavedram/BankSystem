@@ -1,5 +1,6 @@
-package com.IronHack.BankSystem.models;
+package com.IronHack.BankSystem.models.users;
 
+import com.IronHack.BankSystem.models.users.AccountHolder;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,10 @@ public class Address {
     private String country;
     private String zipCode;
 
+    @OneToOne(mappedBy="primaryAddress")
+    private AccountHolder accountHolder;
+    @OneToOne(mappedBy="mailingAddress")
+    private AccountHolder mailingAddress;
 
 
 }

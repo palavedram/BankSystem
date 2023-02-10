@@ -11,9 +11,12 @@ import lombok.Setter;
 
 
 @Entity
-public class Admin extends User {
-    // No additional fields
-}
+public class Admin {
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Integer id;
+    private String name;
 
+}
 
 

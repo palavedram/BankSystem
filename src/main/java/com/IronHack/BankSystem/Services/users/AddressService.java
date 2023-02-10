@@ -1,7 +1,7 @@
 package com.IronHack.BankSystem.Services.users;
 
 import com.IronHack.BankSystem.Services.users.imp.AddressServiceImplement;
-import com.IronHack.BankSystem.models.Address;
+import com.IronHack.BankSystem.models.users.Address;
 import com.IronHack.BankSystem.repositories.users.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

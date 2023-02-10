@@ -18,11 +18,5 @@ import lombok.Setter;
 public class CreditCardAccount extends Account {
     private float creditLimit = 100;
     private float interestRate = 0.2f;
-    // Getters and setters ...
-
-
-
-
-
 
 }

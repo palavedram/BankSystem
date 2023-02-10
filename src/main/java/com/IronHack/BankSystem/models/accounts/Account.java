@@ -5,7 +5,6 @@ import com.IronHack.BankSystem.models.Enum.AcountType;
 import com.IronHack.BankSystem.models.Enum.Status;
 import com.IronHack.BankSystem.models.users.AccountHolder;
 import com.IronHack.BankSystem.models.users.ThirdParty;
-import com.IronHack.BankSystem.models.users.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,35 +24,21 @@ import java.util.Date;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Account {
+public class Account {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
     private BigDecimal balance;
     private String secretKey;
+    private String primaryOwner;
+    private String secondaryOwner;
 
-    @OneToOne
-    private User primaryOwner;
-
-    @OneToOne
-    private User secondaryOwner;
-
-    private float minimumBalance;
-    private float penaltyFee;
-
-    @Column(nullable = true)
-    private float monthlyMaintenanceFee;
-
+    private Float penaltyFee;
 
     @Enumerated(EnumType.STRING)
     private Status status;
-
-    @ManyToOne
-    private ThirdParty thirdParty;
-
-    @ManyToOne
-    @JoinColumn(name = "account_holder_id")
-    private AccountHolder accountHolder;
+    @Enumerated(EnumType.STRING)
+    private AcountType accountType;
 
     @CreationTimestamp
     @Column(insertable = false, updatable = false)
@@ -61,6 +46,13 @@ public abstract class Account {
     @UpdateTimestamp
     @Column(insertable = false)
     private LocalDate updateDate;
+
+    @ManyToOne
+    private ThirdParty thirdParty;
+
+    @ManyToOne
+    @JoinColumn
+    private AccountHolder accountHolder;
 
 }
 
