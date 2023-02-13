@@ -14,7 +14,7 @@ import lombok.Setter;
 
 @Entity
 public class Savings extends Account {
-    private float interestRate = 0.0025f;
+    private Double interestRate = 0.0025;
 
 }
 

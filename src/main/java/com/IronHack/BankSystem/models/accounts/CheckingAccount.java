@@ -15,7 +15,7 @@ import lombok.Setter;
 
 @Entity
 public class CheckingAccount extends Account {
-    private float minimumBalance = 250;
-    private float monthlyMaintenanceFee = 12;
+    private Integer minimumBalance = 250;
+    private Integer monthlyMaintenanceFee = 12;
 
 }

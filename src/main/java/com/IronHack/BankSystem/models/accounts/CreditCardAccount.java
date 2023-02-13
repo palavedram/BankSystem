@@ -16,7 +16,7 @@ import lombok.Setter;
 
 @Entity
 public class CreditCardAccount extends Account {
-    private float creditLimit = 100;
-    private float interestRate = 0.2f;
+    private Integer creditLimit = 100;
+    private Double interestRate = 0.2;
 
 }

@@ -29,7 +29,6 @@ public class AccountHolderService implements AccountHolderServiceImplement {
         return accountHolderRepository.findAll();
     }
 
-
     public AccountHolder create(AccountHolderDTO accountHolderDTO) {
         //create user
         AccountHolder newAccountHolder = new AccountHolder();
