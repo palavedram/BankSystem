@@ -13,10 +13,9 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
+
 
 @NoArgsConstructor
 @Setter
@@ -42,17 +41,18 @@ public class Account {
     private AcountType accountType;
 
     @CreationTimestamp
-    @Column(insertable = false, updatable = false)
-    private LocalDate creationDate;
+    @Column(updatable = false)
+    private LocalDateTime creationDate;
+
     @UpdateTimestamp
-    @Column(insertable = false)
-    private LocalDate updateDate;
+    @Column
+    private LocalDateTime updateDate;
+
 
     @ManyToOne
     private ThirdParty thirdParty;
 
     @ManyToOne
-    @JoinColumn
     @JsonIgnore
     private AccountHolder accountHolder;
 

@@ -10,6 +10,7 @@ import lombok.Setter;
 
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,10 +29,13 @@ public class AccountHolder {
     private String lastName;
     private String email;
     private LocalDate dateOfBirth;
+    private Integer edad;
 
     @OneToOne
+    @JsonIgnore
     private Address primaryAddress ;
     @OneToOne
+    @JsonIgnore
     private Address mailingAddress ;
 
     @OneToMany(mappedBy="accountHolder")

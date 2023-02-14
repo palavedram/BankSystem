@@ -22,10 +22,9 @@ public class Address {
     private String country;
     private String zipCode;
 
-    @OneToOne(mappedBy="primaryAddress")
+    @OneToOne
     private AccountHolder accountHolder;
-    @OneToOne(mappedBy="mailingAddress")
-    private AccountHolder mailingAddress;
+
 
 
 }

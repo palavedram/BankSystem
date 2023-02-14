@@ -24,9 +24,9 @@ public class AccountController {
     }
 
 
-    @PostMapping("/account/{accountHolderId}")
-    public Account create(@PathVariable Integer accountHolderId, @RequestBody AccountDTO accountDTO) {
-        return accountServiceImplement.createAccount(accountHolderId , accountDTO);
+    @PostMapping("/account")
+    public Account create(@RequestBody AccountDTO accountDTO) {
+        return accountServiceImplement.createAccount(accountDTO);
     }
 
     @PutMapping("/account")

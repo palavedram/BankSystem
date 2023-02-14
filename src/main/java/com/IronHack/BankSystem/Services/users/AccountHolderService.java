@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 @Transactional
@@ -32,10 +34,15 @@ public class AccountHolderService implements AccountHolderServiceImplement {
     public AccountHolder create(AccountHolderDTO accountHolderDTO) {
         //create user
         AccountHolder newAccountHolder = new AccountHolder();
+            LocalDate now = LocalDate.now();
+            LocalDate birthDate = accountHolderDTO.getDateOfBirth();
+            Period edad = Period.between(birthDate, now);
+
             newAccountHolder.setFirstName(accountHolderDTO.getFirstName());//String
             newAccountHolder.setLastName(accountHolderDTO.getLastName());//String
             newAccountHolder.setEmail(accountHolderDTO.getEmail());//String
             newAccountHolder.setDateOfBirth(accountHolderDTO.getDateOfBirth());//Localdate
+            newAccountHolder.setEdad(edad.getYears());
         accountHolderRepository.save(newAccountHolder);
 
         //create address
@@ -44,83 +51,11 @@ public class AccountHolderService implements AccountHolderServiceImplement {
             newAddress.setCity(accountHolderDTO.getCity());//String
             newAddress.setCountry(accountHolderDTO.getCountry());//String
             newAddress.setZipCode(accountHolderDTO.getZipCode());//String
+            newAddress.setAccountHolder(newAccountHolder);
         addressRepository.save(newAddress);
         newAccountHolder.setPrimaryAddress(newAddress);
+        newAccountHolder.setMailingAddress(newAddress);
         return newAccountHolder;
-
-/*
-
-        //create account
-        Account newAccount;
-        LocalDate now = LocalDate.now();
-        LocalDate birthDate = accountHolderDTO.getDateOfBirth();
-        Period edad = Period.between(birthDate, now);
-
-        switch (accountHolderDTO.getAccountType().toUpperCase()) {
-            case "SAVINGS":
-                newAccount = new Savings();
-                savingsRepository.save((Savings) newAccount);
-                break;
-            case "CHECKING":
-                if (edad.getYears() >= 18) {
-                    // La persona es mayor de edad
-                    newAccount = new CheckingAccount();
-                    checkingRepository.save((CheckingAccount)newAccount);
-                } else {
-                    // La persona es menor de edad
-                    newAccount = new StudentChecking();
-                    studentCheckingRepository.save((StudentChecking) newAccount);
-                }
-                break;
-            case "CREDIT":
-                newAccount = new CreditCardAccount();
-                creditCardRepository.save((CreditCardAccount) newAccount);
-                break;
-            default:
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Invalid account type");
-        }
-        accountRepository.save(newAccount);
-
-        newAccount.setBalance(BigDecimal.valueOf(accountHolderDTO.getBalance()));
-        newAccount.setSecretKey(accountHolderDTO.getSecretKey());
-        newAccount.setPrimaryOwner(newAccountHolder);
-        newAccount.setStatus(Status.ACTIVE);
-        newAccount.setAccountType(AccountType.valueOf(accountHolderDTO.getAccountType().toUpperCase()));
-        newAccount.setAccountHolder(newAccountHolder);
-        accountRepository.save(newAccount);
-
-        List<Account> accounts = new ArrayList<>();
-        accounts.add(newAccount);
-
-        newAccountHolder.setAccounts(accounts);
-        newAccountHolder.setPrimaryAddress(newAddress);
-        return newAccountHolder;
-*/
-
-        /*// Busca la PrimaryAddress usando el AddressId especificando en la DTO
-        Integer Id = accountHolderDTO.getPrimaryAddress();
-        Address addressDB = addressRepository.findById(Id).orElseThrow(()->
-                new ResponseStatusException(HttpStatus.NOT_FOUND,"Address not found"));
-        newAccountHolder.setPrimaryAddress(addressDB);
-
-        //Busca la MailingAddress
-        if(accountHolderDTO.getMailingAddress() == null){
-            newAccountHolder.setMailingAddress(addressDB);
-        }else{
-            newAccountHolder.setMailingAddress(addressRepository.findById(accountHolderDTO.getMailingAddress()).orElseThrow(()->
-                    new ResponseStatusException(HttpStatus.NOT_FOUND,"Address not found")));
-        }*/
-
-        //Assignarle una cuenta
-/*        List<Account> accounts = new ArrayList<>();
-
-            Account account = accountRepository.findById(accountHolderDTO.getAccounts())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
-            accounts.add(account);
-
-        newAccountHolder.setAccounts(accounts);*/
-
-
     }
 
     public AccountHolder update(AccountHolder accountHolder) {
@@ -133,6 +68,6 @@ public class AccountHolderService implements AccountHolderServiceImplement {
 
     public AccountHolder findById(Integer id) {
         return accountHolderRepository.findById(id).orElseThrow(()->
-                new ResponseStatusException(HttpStatus.NOT_FOUND,"Address not found"));
+                new ResponseStatusException(HttpStatus.NOT_FOUND,"AccountHolder not found"));
     }
 }

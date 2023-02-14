@@ -17,8 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.Period;
+
 import java.util.List;
 
 @Transactional
@@ -49,36 +48,37 @@ public class AccountServices implements AccountServiceImplement {
     }
 
 
-    public Account createAccount(Integer accountHolderId, AccountDTO accountDTO) {
+    public Account createAccount(AccountDTO accountDTO) {
 
         //find the accountholder
-        AccountHolder accountHolderDB = accountHolderRepository.findById(accountHolderId).orElseThrow(() ->
+        AccountHolder accountHolderDB = accountHolderRepository.findById(accountDTO.getAccountHolderId()).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "AccountHolder not found"));
 
         //create account with the account holder
         Account newAccount;
-            LocalDate now = LocalDate.now();
-            LocalDate birthDate = accountHolderDB.getDateOfBirth();
-            Period edad = Period.between(birthDate, now);
 
         switch (accountDTO.getAccountType().toUpperCase()) {
             case "SAVINGS":
                 newAccount = new Savings();
+                newAccount.setAccountType(AcountType.SAVINGS);
                 savingsRepository.save((Savings) newAccount);
                 break;
             case "CHECKING":
-                if (edad.getYears() >= 18) {
+                if (accountHolderDB.getEdad() >= 18) {
                     // La persona es mayor de edad
                     newAccount = new CheckingAccount();
+                    newAccount.setAccountType(AcountType.CHECKING);
                     checkingRepository.save((CheckingAccount) newAccount);
                 } else {
                     // La persona es menor de edad
                     newAccount = new StudentChecking();
+                    newAccount.setAccountType(AcountType.STUDENT);
                     studentCheckingRepository.save((StudentChecking) newAccount);
                 }
                 break;
             case "CREDIT":
                 newAccount = new CreditCardAccount();
+                newAccount.setAccountType(AcountType.CREDIT);
                 creditCardRepository.save((CreditCardAccount) newAccount);
                 break;
             default:
@@ -89,36 +89,12 @@ public class AccountServices implements AccountServiceImplement {
         newAccount.setPrimaryOwner(accountHolderDB.getFirstName()+" "+accountHolderDB.getLastName());
         newAccount.setAccountHolder(accountHolderDB);
         newAccount.setStatus(Status.ACTIVE);
-        newAccount.setAccountType(AcountType.valueOf(accountDTO.getAccountType().toUpperCase()));
 
         return newAccount;
 
     }
+
 }
-        /*// Busca la PrimaryAddress usando el AddressId especificando en la DTO
-        Integer id = accountHolderDTO.getPrimaryAddress();
-        Address addressDB = addressRepository.findById(Id).orElseThrow(()->
-                new ResponseStatusException(HttpStatus.NOT_FOUND,"Address not found"));
-        newAccountHolder.setPrimaryAddress(addressDB);
-
-        //Busca la MailingAddress
-        if(accountHolderDTO.getMailingAddress() == null){
-            newAccountHolder.setMailingAddress(addressDB);
-        }else{
-            newAccountHolder.setMailingAddress(addressRepository.findById(accountHolderDTO.getMailingAddress()).orElseThrow(()->
-                    new ResponseStatusException(HttpStatus.NOT_FOUND,"Address not found")));
-        }*/
-
-        //Assignarle una cuenta
-/*        List<Account> accounts = new ArrayList<>();
-
-            Account account = accountRepository.findById(accountHolderDTO.getAccounts())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
-            accounts.add(account);
-
-        newAccountHolder.setAccounts(accounts);*/
-
-
 
 
 

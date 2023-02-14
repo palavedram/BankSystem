@@ -36,11 +36,6 @@ public class SavingsController {
 
     }
 
-    //Actualizar un Savings
-    @PutMapping("/savings")
-    public Savings update(@RequestParam Savings savings){
-        return savingsServiceImplement.update(savings);
-    }
     //Borrar un Savings
     @DeleteMapping("/savings/{id}")
     public Savings delete(@PathVariable Integer id){

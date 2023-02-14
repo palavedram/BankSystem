@@ -31,14 +31,20 @@ public class SavingsService implements SavingsServiceImplement {
         return savingsRepository.save(savings);
     }
 
-
+    @Override
     public Savings update(Savings savings) {
         return null;
     }
 
 
     public Savings delete(Integer id) {
-        return null;
+
+        Savings deleteSavings = savingsRepository.findById(id).orElseThrow(()->
+                new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,"La cuenta Savings con "+ id+" no existe en la base de datos"));
+        savingsRepository.delete(deleteSavings);
+
+
+        return deleteSavings;
     }
 
 

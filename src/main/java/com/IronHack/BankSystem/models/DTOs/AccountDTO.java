@@ -11,7 +11,7 @@ import lombok.Setter;
 public class AccountDTO {
 
     //Account attributes
-    private Integer accountHolder;
+    private Integer accountHolderId;
 
     private Integer balance;
     private String secretKey;
@@ -22,7 +22,5 @@ public class AccountDTO {
     private String status;
 
     private String accountType;
-
-
 
 }
