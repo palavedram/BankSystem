@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -17,10 +18,15 @@ public class TransactionController {
 
     @PostMapping("/transaction")
     public Transaction create(
-            @RequestParam Integer fromAccountId,
-            @RequestParam Integer toAccountId,
+            @RequestParam Integer senderId,
+            @RequestParam Integer receiverId,
             @RequestParam BigDecimal amount){
-       return transactionServiceImplement.create(fromAccountId,toAccountId,amount);
+       return transactionServiceImplement.create(senderId,receiverId,amount);
+    }
+
+    @GetMapping("/transaction")
+    public List<Transaction>findAllTransaction(){
+        return transactionServiceImplement.findAllTransaction();
     }
 
 

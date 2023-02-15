@@ -26,14 +26,14 @@ import java.time.LocalDateTime;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Account {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private BigDecimal balance;
     private String secretKey;
     private String primaryOwner;
     private String secondaryOwner;
 
-    private Float penaltyFee;
+    BigDecimal PENALTY_FEE = BigDecimal.valueOf(40);
 
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -55,6 +55,8 @@ public class Account {
     @ManyToOne
     @JsonIgnore
     private AccountHolder accountHolder;
+
+
 
 }
 

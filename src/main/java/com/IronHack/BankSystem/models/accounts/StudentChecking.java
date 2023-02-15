@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 
 @Setter
 @Getter
@@ -12,6 +14,6 @@ import lombok.Setter;
 
 @Entity
 public class StudentChecking extends CheckingAccount {
-    private Integer minimumBalance = 0;
-    private Integer monthlyMaintenanceFee = 0;
+    private BigDecimal minimumBalance = BigDecimal.valueOf(0);
+    private BigDecimal monthlyMaintenanceFee = BigDecimal.valueOf(0);
 }

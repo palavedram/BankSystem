@@ -1,12 +1,15 @@
 package com.IronHack.BankSystem.models.DTOs;
 
 import com.IronHack.BankSystem.models.users.AccountHolder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 
 @Getter
 @Setter
+@AllArgsConstructor
+
 
 public class AccountDTO {
 

@@ -64,7 +64,7 @@ public class AccountServices implements AccountServiceImplement {
                 savingsRepository.save((Savings) newAccount);
                 break;
             case "CHECKING":
-                if (accountHolderDB.getEdad() >= 18) {
+                if (accountHolderDB.getEdad() >= 25) {
                     // La persona es mayor de edad
                     newAccount = new CheckingAccount();
                     newAccount.setAccountType(AcountType.CHECKING);
@@ -75,7 +75,14 @@ public class AccountServices implements AccountServiceImplement {
                     newAccount.setAccountType(AcountType.STUDENT);
                     studentCheckingRepository.save((StudentChecking) newAccount);
                 }
+                // Establecer el balance después de crear la instancia de CheckingAccount
+                if (accountDTO.getBalance() == null) {
+                    newAccount.setBalance(((CheckingAccount) newAccount).getMinimumBalance());
+                } else {
+                    newAccount.setBalance(BigDecimal.valueOf(accountDTO.getBalance()));
+                }
                 break;
+
             case "CREDIT":
                 newAccount = new CreditCardAccount();
                 newAccount.setAccountType(AcountType.CREDIT);
@@ -84,17 +91,23 @@ public class AccountServices implements AccountServiceImplement {
             default:
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid account type");
         }
-        newAccount.setBalance(BigDecimal.valueOf(accountDTO.getBalance()));
-        newAccount.setSecretKey(accountDTO.getSecretKey());
-        newAccount.setPrimaryOwner(accountHolderDB.getFirstName()+" "+accountHolderDB.getLastName());
-        newAccount.setAccountHolder(accountHolderDB);
-        newAccount.setStatus(Status.ACTIVE);
 
-        return newAccount;
+
+        if (accountDTO.getBalance() != null) {
+            newAccount.setBalance(BigDecimal.valueOf(accountDTO.getBalance()));
+        }
+
+            newAccount.setSecretKey(accountDTO.getSecretKey());
+            newAccount.setPrimaryOwner(accountHolderDB.getFirstName() + " " + accountHolderDB.getLastName());
+            newAccount.setAccountHolder(accountHolderDB);
+            newAccount.setStatus(Status.ACTIVE);
+
+            return newAccount;
+
+        }
 
     }
 
-}
 
 
 

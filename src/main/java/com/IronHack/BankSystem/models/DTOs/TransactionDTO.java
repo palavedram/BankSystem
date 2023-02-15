@@ -15,8 +15,8 @@ public class TransactionDTO {
     private Integer transactionId;
     private BigDecimal amount;
     private LocalDateTime date;
-    private Integer fromAccountId;
-    private Account toAccountId;
+    private Integer senderId;
+    private Integer receiverId;
 
 
 

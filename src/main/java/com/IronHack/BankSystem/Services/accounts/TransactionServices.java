@@ -1,7 +1,6 @@
 package com.IronHack.BankSystem.Services.accounts;
 
 import com.IronHack.BankSystem.Services.accounts.impl.TransactionServiceImplement;
-import com.IronHack.BankSystem.models.Enum.Status;
 import com.IronHack.BankSystem.models.accounts.Account;
 import com.IronHack.BankSystem.models.accounts.Transaction;
 import com.IronHack.BankSystem.repositories.accounts.AccountRepository;
@@ -27,13 +26,13 @@ public class TransactionServices implements TransactionServiceImplement {
 
 
 
-    public Transaction create(Integer fromAccountId, Integer toAccountId, BigDecimal amount) {
+    public Transaction create(Integer senderId, Integer receiverId, BigDecimal amount) {
 
         LocalDateTime now = LocalDateTime.now();
-        Account fromAccount = accountRepository.findById(fromAccountId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
-        Account toAccount = accountRepository.findById(toAccountId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
+        Account sender = accountRepository.findById(senderId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
+        Account receiver = accountRepository.findById(receiverId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
 
-        if (fromAccount.getBalance().compareTo(amount) < 0){ //fromAccount es menor que amount, lo cual significa que no hay suficientes fondos para realizar la transacción.
+        if (sender.getBalance().compareTo(amount) < 0){ //fromAccount es menor que amount, lo cual significa que no hay suficientes fondos para realizar la transacción.
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient funds");
         }
 
@@ -42,10 +41,10 @@ public class TransactionServices implements TransactionServiceImplement {
          * Despues de comporvar que no hay fraude
          */
         Transaction transaction = new Transaction();
-        transaction.setFromAccount(fromAccount);
-        fromAccount.setBalance(fromAccount.getBalance().subtract(amount));
-        transaction.setToAccount(toAccount);
-        toAccount.setBalance(toAccount.getBalance().add(amount));
+        transaction.setSender(sender);
+        sender.setBalance(sender.getBalance().subtract(amount));
+        transaction.setReceiver(receiver);
+        receiver.setBalance(receiver.getBalance().add(amount));
         transaction.setAmount(amount);
 
         /**
@@ -61,19 +60,36 @@ public class TransactionServices implements TransactionServiceImplement {
          * Guardar en el repositorio el nuevo amount de la cuenta que envia.
          * guardar ese monto en una variable de transacion para que sea mas visual.
          */
-        transaction.setFromAccountBalance(fromAccount.getBalance());
-        accountRepository.save(fromAccount);
+        transaction.setSenderBalance(sender.getBalance());
+        transactionRepository.save(transaction);
+        accountRepository.save(sender);
         /**
          *Lo mismo para la cuenta receptora
          */
-        transaction.setToAccountBalance(toAccount.getBalance());
-        accountRepository.save(toAccount);
+        transaction.setReceiverBalance(receiver.getBalance());
+        transactionRepository.save(transaction);
+        accountRepository.save(receiver);
+
+        // Aplicar penalización si el balance es menor que el mínimo
+
+    /*    if (fromAccount instanceof CheckingAccount) {
+            CheckingAccount checkingAccount = (CheckingAccount) fromAccount;
+            if (checkingAccount.getBalance().compareTo(checkingAccount.getMinimumBalance()) < 0) {
+                checkingAccount.applyPenaltyFee();
+                accountRepository.save(checkingAccount);
+            }
+        }*/
 
         return transaction;
 
 
 
 
+
+    }
+
+    public List<Transaction> findAllTransaction() {
+        return transactionRepository.findAll();
 
     }
 }

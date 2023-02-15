@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 
 
 @NoArgsConstructor
@@ -15,7 +16,17 @@ import lombok.Setter;
 
 @Entity
 public class CheckingAccount extends Account {
-    private Integer minimumBalance = 250;
-    private Integer monthlyMaintenanceFee = 12;
+
+    private BigDecimal minimumBalance = BigDecimal.valueOf(250);
+    private BigDecimal monthlyMaintenanceFee = BigDecimal.valueOf(12);
+
+
+    public void applyPenaltyFee() {
+        BigDecimal balance = getBalance();
+        if (balance.compareTo(minimumBalance) < 0) {
+            BigDecimal penaltyBalance = balance.subtract(PENALTY_FEE);
+            setBalance(penaltyBalance);
+        }
+    }
 
 }

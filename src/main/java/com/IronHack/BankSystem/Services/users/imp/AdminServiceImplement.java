@@ -48,4 +48,6 @@ public interface AdminServiceImplement {
     List<CheckingAccount> findAllCheckings();
 
     List<CreditCardAccount> findAllCredit();
+
+    Account UpdateAccountBalance(Integer accountId, Double newBalance);
 }

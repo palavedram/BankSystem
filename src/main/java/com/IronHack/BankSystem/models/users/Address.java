@@ -25,8 +25,12 @@ public class Address {
     @OneToOne
     private AccountHolder accountHolder;
 
-
-
+    public Address(String street, String city, String country, String zipCode) {
+        this.street = street;
+        this.city = city;
+        this.country = country;
+        this.zipCode = zipCode;
+    }
 }
 
 

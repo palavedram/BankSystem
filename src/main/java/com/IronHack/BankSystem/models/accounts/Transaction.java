@@ -24,16 +24,16 @@ import java.time.LocalDateTime;
 
         private String formattedDateTime; //Dar formato para que sea mas facil de leer.
 
-        private BigDecimal fromAccountBalance;
-        private BigDecimal toAccountBalance;
+        private BigDecimal senderBalance;
+        private BigDecimal receiverBalance;
 
         @ManyToOne
-        @JoinColumn(name = "from_account_id")
-        private Account fromAccount;
+        @JoinColumn(name = "sender_id")
+        private Account sender;
 
         @ManyToOne
-        @JoinColumn(name = "to_account_id")
-        private Account toAccount;
+        @JoinColumn(name = "receiver_id")
+        private Account receiver;
 
 
     }

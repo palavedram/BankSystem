@@ -12,6 +12,7 @@ import com.IronHack.BankSystem.models.accounts.CreditCardAccount;
 import com.IronHack.BankSystem.models.accounts.Savings;
 import com.IronHack.BankSystem.models.users.AccountHolder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,23 +32,27 @@ public class AdminController {
 
     //Crear un Savings
     @PostMapping("/savings")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public Savings createSavings (@RequestBody SavingsDTO savingsDTO){
         return adminServiceImplement.createSavings(savingsDTO);
     }
 
     //Crear un Checking
     @PostMapping("/checking")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public CheckingAccount createSavings (@RequestBody CheckingDTO checkingDTO){
         return adminServiceImplement.createChecking(checkingDTO);
     }
 
     //Crear un Credit
     @PostMapping("/credit")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public CreditCardAccount createSavings (@RequestBody CreditDTO creditDTO){
         return adminServiceImplement.createCredit(creditDTO);
     }
     //Crear un AccountHolder
     @PostMapping("/accountHolder")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public AccountHolder create (@RequestBody AccountHolderDTO accountHolderDTO){
         return adminServiceImplement.createAccountHolder(accountHolderDTO);
     }
@@ -101,9 +106,19 @@ public class AdminController {
      */
     //Actualizar un AccountHolder
     @PutMapping("/accountHolder/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public AccountHolder updateAccountHolder(@PathVariable Integer id , @RequestBody AccountHolder accountHolder){
         return adminServiceImplement.updateAccountHolder(id, accountHolder);
     }
+
+    //Acctualizar accountBalance  /api/admin/updateBalance
+    @PatchMapping("/updateBalance")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public Account updateAccountBalance(@RequestParam Integer accountId, @RequestParam Double newBalance){
+        return adminServiceImplement.UpdateAccountBalance(accountId,newBalance);
+    }
+
+
     //Actualizar  Checking
     @PutMapping("/checking/{id}")
     public CheckingAccount updateChecking(@PathVariable Integer id , @RequestBody CheckingAccount checkingAccount){

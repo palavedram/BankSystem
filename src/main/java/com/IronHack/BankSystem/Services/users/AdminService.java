@@ -5,10 +5,9 @@ import com.IronHack.BankSystem.models.DTOs.AccountHolderDTO;
 import com.IronHack.BankSystem.models.DTOs.CheckingDTO;
 import com.IronHack.BankSystem.models.DTOs.CreditDTO;
 import com.IronHack.BankSystem.models.DTOs.SavingsDTO;
-import com.IronHack.BankSystem.models.accounts.Account;
-import com.IronHack.BankSystem.models.accounts.CheckingAccount;
-import com.IronHack.BankSystem.models.accounts.CreditCardAccount;
-import com.IronHack.BankSystem.models.accounts.Savings;
+import com.IronHack.BankSystem.models.Enum.AcountType;
+import com.IronHack.BankSystem.models.Enum.Status;
+import com.IronHack.BankSystem.models.accounts.*;
 import com.IronHack.BankSystem.models.users.AccountHolder;
 import com.IronHack.BankSystem.models.users.Address;
 import com.IronHack.BankSystem.repositories.accounts.*;
@@ -20,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
@@ -48,17 +48,99 @@ public class AdminService implements AdminServiceImplement {
      */
 
     public Savings createSavings(SavingsDTO savingsDTO) {
-        return null;
+
+        //find the accountholder
+        AccountHolder accountHolderDB = accountHolderRepository.findById(savingsDTO.getAccountHolderId()).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "AccountHolder not found"));
+
+        Savings savings = new Savings();
+        savings.setPrimaryOwner(accountHolderDB.getFirstName() + " " + accountHolderDB.getLastName());
+        savings.setAccountType(AcountType.SAVINGS);
+        savings.setStatus(Status.ACTIVE);
+        savings.setSecretKey(savingsDTO.getSecretKey());
+        savings.setAccountHolder(accountHolderDB);
+
+            if(savingsDTO.getInterestRate() != null){
+                if(savingsDTO.getInterestRate()>0.0025 && savingsDTO.getInterestRate()<=0.5){
+                    savings.setInterestRate(savingsDTO.getInterestRate());
+                }else{
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"InterestRate out of Bounds, Please check");
+                }
+            }
+            if(savingsDTO.getMinimumBalance() != null){
+                if(savingsDTO.getMinimumBalance()>100 && savingsDTO.getMinimumBalance()<=1000){
+                    savings.setMinimumBalance(BigDecimal.valueOf(savingsDTO.getMinimumBalance()));
+                }else{
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Credit Limit Out of Bounds, Please check");
+                }
+        }
+           return savingsRepository.save(savings);
     }
 
 
     public CheckingAccount createChecking(CheckingDTO checkingDTO) {
-        return null;
+
+        AccountHolder accountHolderDB = accountHolderRepository.findById(checkingDTO.getAccountHolderId()).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "AccountHolder not found"));
+
+        if (accountHolderDB.getEdad() >= 25) {
+            // La persona es mayor de edad
+            CheckingAccount newChecking;
+            newChecking = new CheckingAccount();
+            newChecking.setPrimaryOwner(accountHolderDB.getFirstName()+" "+accountHolderDB.getLastName());
+            newChecking.setAccountType(AcountType.CHECKING);
+            newChecking.setStatus(Status.ACTIVE);
+            newChecking.setSecretKey(checkingDTO.getSecretKey());
+            newChecking.setAccountHolder(accountHolderDB);
+            return checkingRepository.save(newChecking);
+
+
+        } else {
+            StudentChecking newStudentAccount;
+            // La persona es menor de edad
+            newStudentAccount = new StudentChecking();
+            newStudentAccount.setPrimaryOwner(accountHolderDB.getFirstName()+" "+accountHolderDB.getLastName());
+            newStudentAccount.setAccountType(AcountType.STUDENT);
+            newStudentAccount.setStatus(Status.ACTIVE);
+            newStudentAccount.setSecretKey(checkingDTO.getSecretKey());
+            newStudentAccount.setAccountHolder(accountHolderDB);
+            return studentCheckingRepository.save(newStudentAccount);
+        }
     }
 
-
     public CreditCardAccount createCredit(CreditDTO creditDTO) {
-        return null;
+        //find the accountholder
+        AccountHolder accountHolderDB = accountHolderRepository.findById(creditDTO.getAccountHolderId()).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "AccountHolder not found"));
+
+        CreditCardAccount creditCardAccount = new CreditCardAccount();
+        creditCardAccount.setPrimaryOwner(accountHolderDB.getFirstName()+" "+accountHolderDB.getLastName());
+        creditCardAccount.setAccountType(AcountType.CREDIT);
+        creditCardAccount.setStatus(Status.ACTIVE);
+        creditCardAccount.setSecretKey(creditDTO.getSecretKey());
+        creditCardAccount.setAccountHolder(accountHolderDB);
+        if(creditDTO.getCreditLimit() != null){
+            if(creditDTO.getCreditLimit()>100 && creditDTO.getCreditLimit()<100000){
+            creditCardAccount.setCreditLimit(creditDTO.getCreditLimit());
+            }else{
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Credit Limit Out of Bounds, Please check");
+            }
+        }else{
+            creditCardAccount.setCreditLimit(100);
+        }
+        if(creditDTO.getInterestRate() != null){
+            if(creditDTO.getInterestRate()>=0.1 && creditDTO.getInterestRate()<=0.2){
+                creditCardAccount.setInterestRate(creditDTO.getInterestRate());
+            }else{
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"InterestRate Out of Bounds, Please check");
+            }
+        }else{
+            creditCardAccount.setInterestRate(0.2);
+        }
+
+        return creditCardRepository.save(creditCardAccount);
+
+
     }
 
     public AccountHolder createAccountHolder(AccountHolderDTO accountHolderDTO) {
@@ -92,6 +174,18 @@ public class AdminService implements AdminServiceImplement {
      *
      * ACTUALIZAR
      */
+
+    public Account UpdateAccountBalance(Integer accountId, Double newBalance) {
+        Account accounDB = accountRepository.findById(accountId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
+        accounDB.setBalance(BigDecimal.valueOf(newBalance));
+        accountRepository.save(accounDB);
+        return accounDB;
+                //api/admin/updateBalance
+    }
+
+
+
 
     public AccountHolder updateAccountHolder(Integer id, AccountHolder accountHolder) {
         return null;
@@ -134,7 +228,7 @@ public class AdminService implements AdminServiceImplement {
 
     /**
      * BUSCAR
-     *
+     * api/admin/
      */
     public AccountHolder findAccountHolderById(Integer id) {
         return accountHolderRepository.findById(id).orElseThrow(()->
@@ -143,26 +237,44 @@ public class AdminService implements AdminServiceImplement {
     public List<AccountHolder> findAllAccountHolder() {
         return accountHolderRepository.findAll();
     }
+
     public Account findAccountById(Integer id) {
-        return accountRepository.findById(id).orElseThrow(()->
+        Account accountDB = accountRepository.findById(id).orElseThrow(()->
                 new ResponseStatusException(HttpStatus.NOT_FOUND,"Account not found"));
+/**
+ * Apply penalty fee iif balance less than minimum balance.
+ */
+        if (accountDB instanceof CheckingAccount) {
+            CheckingAccount checkingAccount = (CheckingAccount) accountDB;
+            if (checkingAccount.getBalance().compareTo(checkingAccount.getMinimumBalance()) < 0) {
+                checkingAccount.applyPenaltyFee();
+                accountRepository.save(checkingAccount);
+            }
+        }
+        if (accountDB instanceof Savings) {
+            Savings savings = (Savings) accountDB;
+            if (savings.getBalance().compareTo(savings.getMinimumBalance()) < 0) {
+                savings.applyPenaltyFee();
+                accountRepository.save(savings);
+            }
+        }
+
+        return accountDB;
+
+
     }
     public List<Account> findAllAccounts() {
         return accountRepository.findAll();
     }
-
-
     public List<Savings> findAllSavings() {
         return savingsRepository.findAll();
     }
-
-
     public List<CheckingAccount> findAllCheckings() {
         return checkingRepository.findAll();
     }
-
-
     public List<CreditCardAccount> findAllCredit() {
         return creditCardRepository.findAll();
     }
+
+
 }

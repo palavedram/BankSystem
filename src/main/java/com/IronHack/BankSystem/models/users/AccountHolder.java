@@ -42,5 +42,14 @@ public class AccountHolder {
     @JsonIgnore
     private List<Account> accounts = new ArrayList<>();
 
+    public AccountHolder(String firstName, String lastName, String email, LocalDate dateOfBirth, Integer edad, Address primaryAddress, Address mailingAddress) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.dateOfBirth = dateOfBirth;
+        this.edad = edad;
+        this.primaryAddress = primaryAddress;
+        this.mailingAddress = mailingAddress;
+    }
 }
 
