@@ -16,8 +16,12 @@ import java.time.LocalDate;
 public class AccountHolderDTO {
 
 //User attributes:
-    private String firstName;
-    private String lastName;
+    private String name;
+    private String username;
+    private String password;
+
+//AccountHolder attributes:
+
     private String email;
     private LocalDate dateOfBirth;
 

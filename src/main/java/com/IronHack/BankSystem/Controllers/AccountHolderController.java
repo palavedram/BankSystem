@@ -5,6 +5,7 @@ import com.IronHack.BankSystem.models.DTOs.AccountHolderDTO;
 import com.IronHack.BankSystem.models.users.AccountHolder;
 import com.IronHack.BankSystem.repositories.users.AccountHolderRepository;
 import com.IronHack.BankSystem.repositories.users.AddressRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class AccountHolderController {
     //Crear un AccountHolder
     @PostMapping("/accountHolder")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public AccountHolder create (@RequestBody AccountHolderDTO accountHolderDTO){
+    public AccountHolder create (@Valid @RequestBody AccountHolderDTO accountHolderDTO){
         return accountHolderServiceImplement.create(accountHolderDTO);
 
     }

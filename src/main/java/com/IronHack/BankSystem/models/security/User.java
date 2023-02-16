@@ -17,6 +17,7 @@ import static jakarta.persistence.FetchType.EAGER;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
     /**
      * The unique identifier for the user
@@ -35,6 +36,7 @@ public class User {
     /**
      * The username used to log in
      */
+    @Column(unique = true)
     private String username;
 
     /**
@@ -47,5 +49,6 @@ public class User {
      */
     @ManyToMany(fetch = EAGER)
     private Collection<Role> roles = new ArrayList<>();
+
 
 }

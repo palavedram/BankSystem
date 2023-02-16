@@ -98,7 +98,7 @@ public class AccountServices implements AccountServiceImplement {
         }
 
             newAccount.setSecretKey(accountDTO.getSecretKey());
-            newAccount.setPrimaryOwner(accountHolderDB.getFirstName() + " " + accountHolderDB.getLastName());
+            newAccount.setPrimaryOwner(accountHolderDB.getName());
             newAccount.setAccountHolder(accountHolderDB);
             newAccount.setStatus(Status.ACTIVE);
 

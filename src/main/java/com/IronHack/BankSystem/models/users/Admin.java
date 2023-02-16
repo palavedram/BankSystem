@@ -1,5 +1,6 @@
 package com.IronHack.BankSystem.models.users;
 
+import com.IronHack.BankSystem.models.security.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,11 +12,9 @@ import lombok.Setter;
 
 
 @Entity
-public class Admin {
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Integer id;
-    private String name;
+public class Admin extends User {
+
+    //no more atributes
 
 }
 

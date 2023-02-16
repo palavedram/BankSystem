@@ -2,8 +2,10 @@ package com.IronHack.BankSystem.models.users;
 
 import com.IronHack.BankSystem.models.accounts.Account;
 
+import com.IronHack.BankSystem.models.security.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,15 +20,12 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Getter
+@AllArgsConstructor
 
 
 @Entity
-public class AccountHolder {
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Integer id;
-    private String firstName;
-    private String lastName;
+public class AccountHolder extends User {
+
     private String email;
     private LocalDate dateOfBirth;
     private Integer edad;
@@ -42,14 +41,6 @@ public class AccountHolder {
     @JsonIgnore
     private List<Account> accounts = new ArrayList<>();
 
-    public AccountHolder(String firstName, String lastName, String email, LocalDate dateOfBirth, Integer edad, Address primaryAddress, Address mailingAddress) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.dateOfBirth = dateOfBirth;
-        this.edad = edad;
-        this.primaryAddress = primaryAddress;
-        this.mailingAddress = mailingAddress;
-    }
+
 }
 
