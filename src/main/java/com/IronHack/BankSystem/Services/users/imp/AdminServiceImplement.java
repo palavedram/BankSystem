@@ -8,7 +8,9 @@ import com.IronHack.BankSystem.models.accounts.Account;
 import com.IronHack.BankSystem.models.accounts.CheckingAccount;
 import com.IronHack.BankSystem.models.accounts.CreditCardAccount;
 import com.IronHack.BankSystem.models.accounts.Savings;
+import com.IronHack.BankSystem.models.security.User;
 import com.IronHack.BankSystem.models.users.AccountHolder;
+import com.IronHack.BankSystem.models.users.Admin;
 
 import java.util.List;
 
@@ -50,4 +52,16 @@ public interface AdminServiceImplement {
     List<CreditCardAccount> findAllCredit();
 
     Account UpdateAccountBalance(Integer accountId, Double newBalance);
+
+    Admin createAdmin(String adminName);
+
+    List<User> findAllUsers();
+
+    List<?> findAnyThing(String whatToGet);
+
+    Account operations(Integer accountId, String type, Integer amount);
+
+    Account maintenanceFee(Integer id);
+
+    Account penaltyFee(Integer id);
 }

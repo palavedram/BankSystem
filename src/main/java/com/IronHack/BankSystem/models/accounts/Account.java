@@ -28,12 +28,12 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private BigDecimal balance;
+    private BigDecimal balance = BigDecimal.valueOf(0);
     private String secretKey;
     private String primaryOwner;
     private String secondaryOwner;
 
-    BigDecimal PENALTY_FEE = BigDecimal.valueOf(40);
+    BigDecimal PENALTY_FEE = BigDecimal.valueOf(-40);
 
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -53,7 +53,6 @@ public class Account {
     private ThirdParty thirdParty;
 
     @ManyToOne
-    @JsonIgnore
     private AccountHolder accountHolder;
 
 

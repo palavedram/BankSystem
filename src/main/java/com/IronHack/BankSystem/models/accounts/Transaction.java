@@ -1,5 +1,6 @@
 package com.IronHack.BankSystem.models.accounts;
 
+import com.IronHack.BankSystem.models.Enum.TransactionType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -19,6 +20,9 @@ import java.time.LocalDateTime;
         private Integer transactionId;
         private BigDecimal amount;
 
+        @Enumerated(EnumType.STRING)
+        private TransactionType transactionType;
+
         @JsonIgnore
         private LocalDateTime dateTime;
 
@@ -27,14 +31,16 @@ import java.time.LocalDateTime;
         private BigDecimal senderBalance;
         private BigDecimal receiverBalance;
 
+
+
         @ManyToOne
-        @JoinColumn(name = "sender_id")
+        @JoinColumn(name = "fromAccount")
         private Account sender;
 
         @ManyToOne
-        @JoinColumn(name = "receiver_id")
+        @JoinColumn(name = "toAccount")
         private Account receiver;
 
 
-    }
+}
 

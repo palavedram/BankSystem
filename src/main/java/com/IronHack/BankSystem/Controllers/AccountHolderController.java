@@ -1,58 +1,56 @@
 package com.IronHack.BankSystem.Controllers;
 
+import com.IronHack.BankSystem.Services.accounts.impl.TransactionServiceImplement;
 import com.IronHack.BankSystem.Services.users.imp.AccountHolderServiceImplement;
-import com.IronHack.BankSystem.models.DTOs.AccountHolderDTO;
-import com.IronHack.BankSystem.models.users.AccountHolder;
-import com.IronHack.BankSystem.repositories.users.AccountHolderRepository;
-import com.IronHack.BankSystem.repositories.users.AddressRepository;
-import jakarta.validation.Valid;
+import com.IronHack.BankSystem.models.accounts.Account;
+import com.IronHack.BankSystem.models.accounts.Transaction;
+import com.IronHack.BankSystem.repositories.accounts.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/accountHolder")
+
 public class AccountHolderController {
 
     @Autowired
     AccountHolderServiceImplement accountHolderServiceImplement;
 
 
-    //CRUD sobre la entidad AccountHolder
-
-    //Buscar todos los AccountHolders
-    @GetMapping("/accountHolder")
-    public List<AccountHolder>findAll(){
-        return accountHolderServiceImplement.findAll();
+    @GetMapping("/accounts")
+    public List<Account> findAHaccounts(Authentication autentication){
+        System.out.println(autentication.getPrincipal());
+        return accountHolderServiceImplement.find(autentication);
     }
 
-    //Buscar AccountHolder por ID
-    @GetMapping("/accountHolder/{id}")
-    public AccountHolder findById(@PathVariable Integer id){
-        return accountHolderServiceImplement.findById(id);
+    @PatchMapping("/operate")
+    public Account operate (Authentication authentication,
+                            @RequestParam Integer id,
+                            @RequestParam String type,
+                            @RequestParam Integer amount){
+        System.out.println(authentication.getPrincipal());
+        return accountHolderServiceImplement.depositWithdraw(authentication, id, type ,amount);
     }
 
-    //Crear un AccountHolder
-    @PostMapping("/accountHolder")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public AccountHolder create (@Valid @RequestBody AccountHolderDTO accountHolderDTO){
-        return accountHolderServiceImplement.create(accountHolderDTO);
-
+    @PostMapping("/transaction")
+    public Transaction createTransactionbyOwner(
+            Authentication authentication,
+            @RequestParam Integer senderAccountId,
+            @RequestParam Integer receiverAccountId,
+            @RequestParam BigDecimal amount){
+        return accountHolderServiceImplement.createTransactionbyOwner(authentication,senderAccountId,receiverAccountId,amount);
     }
-
-    //Actualizar un AccountHolder
-    @PutMapping("/accountHolder")
-    public AccountHolder update(@RequestParam AccountHolder accountHolder){
-        return accountHolderServiceImplement.update(accountHolder);
+    @PostMapping("/transactionBetweenOwenedAccounts")
+    public Transaction createTransactionToSameOwnerAccounts(
+            Authentication authentication,
+            @RequestParam Integer senderAccountId,
+            @RequestParam Integer receiverAccountId,
+            @RequestParam BigDecimal amount){
+        return accountHolderServiceImplement.createTransactionToSameOwnerAccounts(authentication,senderAccountId,receiverAccountId,amount);
     }
-    //Borrar un AccountHolder
-    @DeleteMapping("/accountHolder/{id}")
-    public AccountHolder delete(@PathVariable Integer id){
-        return accountHolderServiceImplement.delete(id);
-    }
-
-
 
 }

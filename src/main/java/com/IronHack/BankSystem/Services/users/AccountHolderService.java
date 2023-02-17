@@ -1,24 +1,31 @@
 package com.IronHack.BankSystem.Services.users;
 
 import com.IronHack.BankSystem.Services.users.imp.AccountHolderServiceImplement;
-import com.IronHack.BankSystem.models.security.Role;
-import com.IronHack.BankSystem.models.users.Address;
-import com.IronHack.BankSystem.models.DTOs.AccountHolderDTO;
+import com.IronHack.BankSystem.models.Enum.TransactionType;
+import com.IronHack.BankSystem.models.accounts.Account;
+import com.IronHack.BankSystem.models.accounts.Transaction;
 
 import com.IronHack.BankSystem.models.users.AccountHolder;
+import com.IronHack.BankSystem.repositories.accounts.AccountRepository;
+import com.IronHack.BankSystem.repositories.accounts.TransactionRepository;
 import com.IronHack.BankSystem.repositories.security.RoleRepository;
+import com.IronHack.BankSystem.repositories.security.UserRepository;
 import com.IronHack.BankSystem.repositories.users.AccountHolderRepository;
 import com.IronHack.BankSystem.repositories.users.AddressRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
-import java.time.Period;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
+
 
 @Transactional
 @Service
@@ -32,63 +39,148 @@ public class AccountHolderService implements AccountHolderServiceImplement {
     RoleRepository roleRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    AccountRepository accountRepository;
+    @Autowired
+    TransactionRepository transactionRepository;
+    @Autowired
+    UserRepository userRepository;
 
 
-    public List<AccountHolder> findAll() {
-        return accountHolderRepository.findAll();
+    public List<Account> find(Authentication autentication) {
+        return accountRepository.findByAccountHolderUsername(autentication.getPrincipal().toString());
     }
 
-    public AccountHolder create(AccountHolderDTO accountHolderDTO) {
-        //comporbar que username no existe en la base de datos.
-        String username = accountHolderDTO.getUsername();
-        if (accountHolderRepository.findByUsername(username) != null) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN ,"El nombre de usuario  "+username+"  ya está en uso");
+    public Account depositWithdraw(Authentication authentication, Integer id, String type, Integer amount) {
+
+        Account accountDB = accountRepository.findById(id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
+        List<Account> accountList = accountRepository.findByAccountHolderUsername(authentication.getPrincipal().toString());
+
+        if (accountList.contains(accountDB)) {
+            // La cuenta está asociada al usuario que ha iniciado sesión
+            switch (type.toLowerCase()) {
+                case "withdraw":
+                    if (accountDB.getBalance().compareTo(BigDecimal.valueOf(amount)) < 0) {
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient funds");
+                    }
+                    accountDB.setBalance(accountDB.getBalance().subtract(BigDecimal.valueOf(amount)));
+                    Transaction withdraw = new Transaction();
+                    withdraw.setTransactionType(TransactionType.WITHDRAW_MONEY);
+                    withdraw.setAmount(BigDecimal.valueOf(amount));
+                    withdraw.setSender(accountDB);
+                    withdraw.setSenderBalance(accountDB.getBalance());
+                    withdraw.setDateTime(LocalDateTime.now());
+                    transactionRepository.save(withdraw);
+                    return accountDB;
+                case "deposit":
+                    accountDB.setBalance(accountDB.getBalance().add(BigDecimal.valueOf(amount)));
+                    Transaction deposit = new Transaction();
+                    deposit.setTransactionType(TransactionType.DEPOSIT_MONEY);
+                    deposit.setAmount(BigDecimal.valueOf(amount));
+                    deposit.setDateTime(LocalDateTime.now());
+                    deposit.setSender(accountDB);
+                    deposit.setSenderBalance(accountDB.getBalance());
+                    transactionRepository.save(deposit);
+                    return accountDB;
+                default:
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "please check the input ");
+            }
+
+        } else {
+            // La cuenta no está asociada al usuario que ha iniciado sesión
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized access to account");
         }
-        //create user
-        AccountHolder newAccountHolder = new AccountHolder();
-        //calculate age
-            LocalDate now = LocalDate.now();
-            LocalDate birthDate = accountHolderDTO.getDateOfBirth();
-            Period edad = Period.between(birthDate, now);
-        //set user attributes
-            newAccountHolder.setName(accountHolderDTO.getName());
-            newAccountHolder.setUsername(accountHolderDTO.getUsername());
-        //encriptar contraseña
-            //newAccountHolder.setPassword(accountHolderDTO.getPassword());
-        String encodedPassword = passwordEncoder.encode(accountHolderDTO.getPassword());
-        newAccountHolder.setPassword(encodedPassword);
-            newAccountHolder.setEmail(accountHolderDTO.getEmail());
-            newAccountHolder.setDateOfBirth(accountHolderDTO.getDateOfBirth());//Localdate
-            newAccountHolder.setEdad(edad.getYears());
-            accountHolderRepository.save(newAccountHolder);
-        // add role to user
-        Role role = roleRepository.findByName("ROLE_ACCOUNT_HOLDER"); // obtenemos el rol "ROLE_ACCOUNT_HOLDER"
-        newAccountHolder.getRoles().add(role); // agregamos el rol al usuario
-        accountHolderRepository.save(newAccountHolder); // guardamos la relación entre usuario y rol
-
-        //create address
-        Address newAddress = new Address();
-            newAddress.setStreet(accountHolderDTO.getStreet());//String
-            newAddress.setCity(accountHolderDTO.getCity());//String
-            newAddress.setCountry(accountHolderDTO.getCountry());//String
-            newAddress.setZipCode(accountHolderDTO.getZipCode());//String
-            newAddress.setAccountHolder(newAccountHolder);
-            addressRepository.save(newAddress);
-            newAccountHolder.setPrimaryAddress(newAddress);
-            newAccountHolder.setMailingAddress(newAddress);
-        return newAccountHolder;
     }
 
-    public AccountHolder update(AccountHolder accountHolder) {
-        return null;
+    public Transaction createTransactionbyOwner(Authentication authentication,Integer senderAccountId, Integer receiverAccountId, BigDecimal amount) {
+        LocalDateTime now = LocalDateTime.now();
+
+        AccountHolder accountHolder = accountHolderRepository.findByUsername(authentication.getPrincipal().toString());
+
+        // Buscamos la cuenta emisora
+        Account senderAccount = accountRepository.findById(senderAccountId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
+        //Buscamos la cuenta receptora
+        Account receiverAccount = accountRepository.findById(receiverAccountId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
+        // Verificamos que la cuenta emisora pertenece al account holder logueado
+        if (!senderAccount.getAccountHolder().getId().equals(accountHolder.getId())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Sender account does not belong to the logged account holder");
+        }
+
+        //Verificamos que la cuenta tenga fondos suficientes
+        if (senderAccount.getBalance().compareTo(amount) < 0){ //fromAccount es menor que amount, lo cual significa que no hay suficientes fondos para realizar la transacción.
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient funds");
+        }
+        // Resto el balance de la cuenta emisora y lo sumo al balance de la cuenta receptora
+        BigDecimal senderBalance = senderAccount.getBalance();
+        BigDecimal receiverBalance = receiverAccount.getBalance();
+        senderAccount.setBalance(senderBalance.subtract(amount));
+        receiverAccount.setBalance(receiverBalance.add(amount));
+
+        // Creamos la transacción
+        Transaction transaction = new Transaction();
+        transaction.setTransactionType(TransactionType.WIRE_TRANSFER);
+        transaction.setSender(senderAccount);
+        transaction.setReceiver(receiverAccount);
+        transaction.setAmount(amount);
+        transaction.setDateTime(now);
+        transaction.setSenderBalance(senderAccount.getBalance());
+        transaction.setReceiverBalance(receiverAccount.getBalance());
+
+        // Guardamos la transacción y las cuentas actualizadas
+        transactionRepository.save(transaction);
+        accountRepository.save(senderAccount);
+        accountRepository.save(receiverAccount);
+
+        return transaction;
     }
 
-    public AccountHolder delete(Integer id) {
-        return null;
-    }
+    public Transaction createTransactionToSameOwnerAccounts(Authentication authentication, Integer senderAccountId, Integer receiverAccountId, BigDecimal amount) {
+        LocalDateTime now = LocalDateTime.now();
 
-    public AccountHolder findById(Integer id) {
-        return accountHolderRepository.findById(id).orElseThrow(()->
-                new ResponseStatusException(HttpStatus.NOT_FOUND,"AccountHolder not found"));
+        AccountHolder accountHolder = accountHolderRepository.findByUsername(authentication.getPrincipal().toString());
+
+        // Obtenemos todas las cuentas del account holder logueado
+        List<Account> accountList = accountRepository.findByAccountHolderUsername(authentication.getPrincipal().toString());
+        // Buscamos la cuenta emisora
+        Account senderAccount = accountRepository.findById(senderAccountId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
+        // Buscamos la cuenta receptora
+        Account receiverAccount = accountRepository.findById(receiverAccountId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
+        // Verificamos que la cuenta emisora pertenece al account holder logueado
+        if (!senderAccount.getAccountHolder().getId().equals(accountHolder.getId())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Sender account does not belong to the logged account holder");
+        }
+        // Verificamos que la cuenta receptora pertenece al account holder logueado
+        if (!receiverAccount.getAccountHolder().getId().equals(accountHolder.getId())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Receiver account does not belong to the logged account holder");
+        }
+
+        //Verificamos que la cuenta tenga fondos suficientes
+        if (senderAccount.getBalance().compareTo(amount) < 0){ //fromAccount es menor que amount, lo cual significa que no hay suficientes fondos para realizar la transacción.
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Insufficient funds");
+        }
+
+        // Resto el balance de la cuenta emisora y lo sumo al balance de la cuenta receptora
+        BigDecimal senderBalance = senderAccount.getBalance();
+        BigDecimal receiverBalance = receiverAccount.getBalance();
+        senderAccount.setBalance(senderBalance.subtract(amount));
+        receiverAccount.setBalance(receiverBalance.add(amount));
+
+        // Creamos la transacción
+        Transaction transaction = new Transaction();
+        transaction.setTransactionType(TransactionType.WIRE_TRANSFER);
+        transaction.setSender(senderAccount);
+        transaction.setReceiver(receiverAccount);
+        transaction.setAmount(amount);
+        transaction.setDateTime(now);
+        transaction.setSenderBalance(senderAccount.getBalance());
+        transaction.setReceiverBalance(receiverAccount.getBalance());
+
+        // Guardamos la transacción y las cuentas actualizadas
+        transactionRepository.save(transaction);
+        accountRepository.save(senderAccount);
+        accountRepository.save(receiverAccount);
+
+        return transaction;
     }
 }

@@ -3,7 +3,10 @@ package com.IronHack.BankSystem;
 import com.IronHack.BankSystem.Services.security.impl.UserService;
 import com.IronHack.BankSystem.models.security.Role;
 import com.IronHack.BankSystem.models.security.User;
+import com.IronHack.BankSystem.models.users.AccountHolder;
+import com.IronHack.BankSystem.models.users.Address;
 import com.IronHack.BankSystem.repositories.accounts.SavingsRepository;
+import com.IronHack.BankSystem.repositories.security.RoleRepository;
 import com.IronHack.BankSystem.repositories.users.AccountHolderRepository;
 import com.IronHack.BankSystem.repositories.users.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +17,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 @SpringBootApplication
 public class BankSystemApplication implements CommandLineRunner {
@@ -24,6 +29,8 @@ public class BankSystemApplication implements CommandLineRunner {
 	AccountHolderRepository accountHolderRepository;
 	@Autowired
 	AddressRepository addressRepository;
+	@Autowired
+	private RoleRepository roleRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(BankSystemApplication.class, args);
@@ -41,16 +48,19 @@ public class BankSystemApplication implements CommandLineRunner {
 				userService.saveRole(new Role(null, "ROLE_ADMIN"));
 				userService.saveRole(new Role(null, "ROLE_THIRD_PARTY"));
 
+
 			/*	userService.saveUser(new User(null, "John Doe", "john", "1234", new ArrayList<>()));
 				userService.saveUser(new User(null, "James Smith", "james", "1234", new ArrayList<>()));
 				userService.saveUser(new User(null, "Jane Carry", "jane", "1234", new ArrayList<>()));
-				userService.saveUser(new User(null, "Chris Anderson", "chris", "1234", new ArrayList<>()));*/
+				userService.saveUser(new User(null, "Chris Anderson", "chris", "1234", new ArrayList<>()));
+
 
 			/*	userService.addRoleToUser("john", "ROLE_USER");
 				userService.addRoleToUser("james", "ROLE_ADMIN");
 				userService.addRoleToUser("jane", "ROLE_USER");
 				userService.addRoleToUser("chris", "ROLE_ADMIN");
-				userService.addRoleToUser("chris", "ROLE_USER");*/
+				userService.addRoleToUser("chris", "ROLE_USER");
+				*/
 			};
 		}
 	@Override

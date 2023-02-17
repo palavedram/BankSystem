@@ -1,6 +1,7 @@
 package com.IronHack.BankSystem.Services.accounts;
 
 import com.IronHack.BankSystem.Services.accounts.impl.TransactionServiceImplement;
+import com.IronHack.BankSystem.models.Enum.TransactionType;
 import com.IronHack.BankSystem.models.accounts.Account;
 import com.IronHack.BankSystem.models.accounts.Transaction;
 import com.IronHack.BankSystem.repositories.accounts.AccountRepository;
@@ -41,6 +42,7 @@ public class TransactionServices implements TransactionServiceImplement {
          * Despues de comporvar que no hay fraude
          */
         Transaction transaction = new Transaction();
+        transaction.setTransactionType(TransactionType.WIRE_TRANSFER);
         transaction.setSender(sender);
         sender.setBalance(sender.getBalance().subtract(amount));
         transaction.setReceiver(receiver);

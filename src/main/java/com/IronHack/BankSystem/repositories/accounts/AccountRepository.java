@@ -8,7 +8,7 @@ import java.util.List;
 @Repository
 public interface AccountRepository extends JpaRepository<Account,Integer> {
 
-    public List<Account> findByPrimaryOwner(String primaryOwner);
+    public List<Account> findByAccountHolderUsername(String Username);
 
 
 }

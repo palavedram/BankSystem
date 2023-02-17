@@ -1,5 +1,6 @@
 package com.IronHack.BankSystem.models.users;
 
+import com.IronHack.BankSystem.models.security.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,10 +12,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
-public class ThirdParty {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String name;
+public class ThirdParty extends User {
+
     private String hashedKey;
 }

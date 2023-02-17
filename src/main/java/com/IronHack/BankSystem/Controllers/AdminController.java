@@ -10,7 +10,9 @@ import com.IronHack.BankSystem.models.accounts.Account;
 import com.IronHack.BankSystem.models.accounts.CheckingAccount;
 import com.IronHack.BankSystem.models.accounts.CreditCardAccount;
 import com.IronHack.BankSystem.models.accounts.Savings;
+import com.IronHack.BankSystem.models.security.User;
 import com.IronHack.BankSystem.models.users.AccountHolder;
+import com.IronHack.BankSystem.models.users.Admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -51,10 +53,16 @@ public class AdminController {
         return adminServiceImplement.createCredit(creditDTO);
     }
     //Crear un AccountHolder
-    @PostMapping("/accountHolder")
+    @PutMapping("/accountHolder")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public AccountHolder create (@RequestBody AccountHolderDTO accountHolderDTO){
         return adminServiceImplement.createAccountHolder(accountHolderDTO);
+    }
+    //Crear un Admin
+    @PutMapping("/admin")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public Admin createAdmin(@RequestParam String adminName ){
+        return adminServiceImplement.createAdmin(adminName);
     }
 
     /**
@@ -98,6 +106,16 @@ public class AdminController {
     public List<CreditCardAccount> findAllCredit(){
         return adminServiceImplement.findAllCredit();
     }
+    //Buscar todos los Users
+    @GetMapping("/users")
+    public List<User>finsAllUsers(){
+        return adminServiceImplement.findAllUsers();
+    }
+    //Buscar todo con un request param
+    @GetMapping("/get")
+    public List<?>getAll(@RequestParam String whatToGet){
+        return adminServiceImplement.findAnyThing(whatToGet);
+    }
 
 
 
@@ -116,6 +134,25 @@ public class AdminController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public Account updateAccountBalance(@RequestParam Integer accountId, @RequestParam Double newBalance){
         return adminServiceImplement.UpdateAccountBalance(accountId,newBalance);
+    }
+
+    //MonthlyMaintenance fee
+    @PatchMapping("/maintenanceFee")
+    public Account maintenanceFee(@RequestParam Integer id){
+        return adminServiceImplement.maintenanceFee(id);
+    }
+    //Penalty fee if apply
+    @PatchMapping("/penaltyFee")
+    public Account penaltyFee(@RequestParam Integer id){
+        return adminServiceImplement.penaltyFee(id);
+    }
+
+    //ingresar o retirar dinero
+    @PatchMapping("/operations")
+    public Account operate(@RequestParam Integer accountId,
+                           @RequestParam String type,
+                           @RequestParam Integer amount){
+        return adminServiceImplement.operations(accountId,type,amount);
     }
 
 

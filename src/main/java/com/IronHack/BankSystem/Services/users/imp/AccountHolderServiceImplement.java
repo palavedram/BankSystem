@@ -1,18 +1,24 @@
 package com.IronHack.BankSystem.Services.users.imp;
 
-import com.IronHack.BankSystem.models.DTOs.AccountHolderDTO;
-import com.IronHack.BankSystem.models.users.AccountHolder;
 
+import com.IronHack.BankSystem.models.accounts.Account;
+import com.IronHack.BankSystem.models.accounts.Transaction;
+import org.springframework.security.core.Authentication;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface AccountHolderServiceImplement {
-    List<AccountHolder> findAll();
+    List<Account> find(Authentication autentication);
 
-    AccountHolder create(AccountHolderDTO accountHolderDTO);
+    Account depositWithdraw(Authentication authentication, Integer id, String type, Integer amount);
 
-    AccountHolder update(AccountHolder accountHolder);
+    Transaction createTransactionbyOwner(Authentication authentication,Integer senderAccountId, Integer receiverId, BigDecimal amount);
 
-    AccountHolder delete(Integer id);
+    Transaction createTransactionToSameOwnerAccounts(Authentication authentication, Integer senderAccountId, Integer receiverAccountId, BigDecimal amount);
 
-    AccountHolder findById(Integer id);
+
+    //List<Account> findAccountHolderAccounts(Authentication authentication);
+
+    // Account depositWithdraw(Authentication authentication, Integer id,String type, Integer amount);
 }

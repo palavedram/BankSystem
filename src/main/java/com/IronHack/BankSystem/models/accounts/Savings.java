@@ -21,7 +21,7 @@ public class Savings extends Account {
     public void applyPenaltyFee() {
         BigDecimal balance = getBalance();
         if (balance.compareTo(minimumBalance) < 0) {
-            BigDecimal penaltyBalance = balance.subtract(PENALTY_FEE);
+            BigDecimal penaltyBalance = balance.add(PENALTY_FEE);
             setBalance(penaltyBalance);
         }
     }
