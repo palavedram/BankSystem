@@ -1,10 +1,8 @@
 package com.IronHack.BankSystem.Controllers;
 
-import com.IronHack.BankSystem.Services.accounts.impl.TransactionServiceImplement;
 import com.IronHack.BankSystem.Services.users.imp.AccountHolderServiceImplement;
 import com.IronHack.BankSystem.models.accounts.Account;
 import com.IronHack.BankSystem.models.accounts.Transaction;
-import com.IronHack.BankSystem.repositories.accounts.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
