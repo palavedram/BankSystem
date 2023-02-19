@@ -1,3 +1,9 @@
+## Importante
+Este proyecto se encuentra en construcción y no debe considerarse una versión final. Es posible que contenga errores o fallos, por lo que recomendamos utilizarlo con precaución y siempre realizar pruebas exhaustivas antes de su implementación en un entorno de producción. Además, estamos trabajando constantemente en mejorar y agregar nuevas funcionalidades, por lo que agradecemos cualquier comentario o sugerencia que pueda ayudarnos a mejorar este proyecto. ¡Gracias por tu comprensión y apoyo!
+
+
+
+
 ## Spring Boot
 
 Proyecto Spring Boot con las dependencias / starters:
