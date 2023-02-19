@@ -16,7 +16,7 @@ Puedes descargar el archivo de POSTMAN para este proyecto [aquí](BankSystemAPI.
 
 Aquí se muestra el diagrama de clases de la base de datos:
 
-![Diagrama de clases de la base de datos](BankSystemAPI.postman_collection.json)
+![Diagrama de clases de la base de datos](Captura de pantalla 2023-02-19 221511.png)
 
 ## Uso 
 
