@@ -1,0 +1,745 @@
+{
+	"info": {
+		"_postman_id": "c7b0166c-d707-4401-8049-38d0a493da96",
+		"name": "BankSystemAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25571346"
+	},
+	"item": [
+		{
+			"name": "ADMIN",
+			"item": [
+				{
+					"name": "AdminDeleteAccount",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/admin/account?id=1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"account"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateAccountBalance",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/admin/updateBalance?accountId=1&newBalance=5000",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"updateBalance"
+							],
+							"query": [
+								{
+									"key": "accountId",
+									"value": "1"
+								},
+								{
+									"key": "newBalance",
+									"value": "5000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BankingOperation",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/admin/operations?accountId=1&type=deposit&amount=300",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"operations"
+							],
+							"query": [
+								{
+									"key": "accountId",
+									"value": "1"
+								},
+								{
+									"key": "type",
+									"value": "deposit"
+								},
+								{
+									"key": "type",
+									"value": "withdraw",
+									"disabled": true
+								},
+								{
+									"key": "amount",
+									"value": "300"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MaintenanceFee",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/admin/maintenanceFee?id=1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"maintenanceFee"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								},
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PenaltyFee",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/admin/penaltyFee?id=1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"penaltyFee"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								},
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAccountById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/admin/accounts/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"accounts",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "WhatToGet",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/admin/get?whatToGet=accounts",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"get"
+							],
+							"query": [
+								{
+									"key": "whatToGet",
+									"value": "admin",
+									"disabled": true
+								},
+								{
+									"key": "whatToGet",
+									"value": "users",
+									"disabled": true
+								},
+								{
+									"key": "whatToGet",
+									"value": "accountHolder",
+									"disabled": true
+								},
+								{
+									"key": "whatToGet",
+									"value": "checking",
+									"disabled": true
+								},
+								{
+									"key": "whatToGet",
+									"value": "Saving",
+									"disabled": true
+								},
+								{
+									"key": "whatToGet",
+									"value": "credit",
+									"disabled": true
+								},
+								{
+									"key": "whatToGet",
+									"value": "thirdparty",
+									"disabled": true
+								},
+								{
+									"key": "whatToGet",
+									"value": "accounts"
+								},
+								{
+									"key": "whatToGet",
+									"value": "transactions",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateCreditAccount",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"accountHolderId\":1,\r\n    \"secretKey\": \"1234\",\r\n    \"creditLimit\": 3000,\r\n    \"interestRate\": 0.15\r\n\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/admin/credit",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"credit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateSavings",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"accountHolderId\":2,\r\n    \"secretKey\": \"1234\",\r\n    \"interestRate\": 0.4,\r\n    \"minimumBalance\": 500\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/admin/savings",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"savings"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateChecking/Student",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"accountHolderId\":2,\r\n    \"secretKey\": \"1234\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/admin/checking",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"checking"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateAdmin",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/admin/admin?adminName=Bob1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"admin"
+							],
+							"query": [
+								{
+									"key": "adminName",
+									"value": "Bob1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateAccountHolder",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Pere\",\r\n    \"username\": \"palavedram\",\r\n    \"email\": \"pere@alavedra.com\",\r\n    \"password\":\"TestPasword\",\r\n    \"dateOfBirth\": \"1993-05-20\",\r\n    \"street\": \"Calle 123\",\r\n    \"city\": \"Ciudad 1\",\r\n    \"country\": \"Pais 1\",\r\n    \"zipCode\": \"12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/admin/accountHolder",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"accountHolder"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateMinorAccountHolder",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Alex\",\r\n    \"username\": \"UserAlex\",\r\n    \"email\": \"alex@userAlex.com\",\r\n    \"password\":\"password1234\",\r\n    \"dateOfBirth\": \"2012-05-20\",\r\n    \"street\": \"Calle 123\",\r\n    \"city\": \"Ciudad 1\",\r\n    \"country\": \"Pais 1\",\r\n    \"zipCode\": \"12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/admin/accountHolder",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admin",
+								"accountHolder"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "AccountHolder",
+			"item": [
+				{
+					"name": "(AUTH)getOwnAccounts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYWxhdmVkcmFtIiwicm9sZXMiOlsiUk9MRV9BQ0NPVU5UX0hPTERFUiJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXBpL2xvZ2luIiwiZXhwIjoxNjc2NjQ1NTIxfQ.wf6Q_kyaGsSXKwF47q8HcGSrTvTQZoslZXGy_xmGe9s",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/accountHolder/accounts",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"accountHolder",
+								"accounts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(AUTH)BankingOperation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYWxhdmVkcmFtIiwicm9sZXMiOlsiUk9MRV9BQ0NPVU5UX0hPTERFUiJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXBpL2xvZ2luIiwiZXhwIjoxNjc2NjQ1MTYyfQ.68WoGkXki_076ces0KSOTvUl0kHOkb7XOFox5h1TTNM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/accountHolder/operate?id=3&type=deposit&amount=500",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"accountHolder",
+								"operate"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "3"
+								},
+								{
+									"key": "type",
+									"value": "deposit"
+								},
+								{
+									"key": "type",
+									"value": "withdraw",
+									"disabled": true
+								},
+								{
+									"key": "amount",
+									"value": "500"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(AUTH)Transaction",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYWxhdmVkcmFtIiwicm9sZXMiOlsiUk9MRV9BQ0NPVU5UX0hPTERFUiJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXBpL2xvZ2luIiwiZXhwIjoxNjc2NjQ1MTYyfQ.68WoGkXki_076ces0KSOTvUl0kHOkb7XOFox5h1TTNM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/accountHolder/transaction?senderAccountId=2&receiverAccountId=2&amount=100",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"accountHolder",
+								"transaction"
+							],
+							"query": [
+								{
+									"key": "senderAccountId",
+									"value": "2"
+								},
+								{
+									"key": "receiverAccountId",
+									"value": "2"
+								},
+								{
+									"key": "amount",
+									"value": "100"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "RAW",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/login?username=palavedram&password=TestPasword",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"login"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "Admin Bob",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "admin1234",
+									"disabled": true
+								},
+								{
+									"key": "username",
+									"value": "palavedram"
+								},
+								{
+									"key": "password",
+									"value": "TestPasword"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "1.-addAdress",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ser",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "07f00a08-6dd5-4510-b959-53751ce2718a",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"street\": \"Calle 123\",\r\n    \"city\": \"Ciudad 1\",\r\n    \"country\": \"Pais 1\",\r\n    \"zipCode\": \"12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/addresses",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"addresses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateAccount",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"accountHolderId\":2,\r\n    \"balance\": 5000.0,\r\n    \"secretKey\": \"1234\",\r\n    \"accountType\": \"credit\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/account",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transaction",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/transaction?senderId=1&receiverId=2&amount=100",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"transaction"
+							],
+							"query": [
+								{
+									"key": "senderId",
+									"value": "1"
+								},
+								{
+									"key": "receiverId",
+									"value": "2"
+								},
+								{
+									"key": "amount",
+									"value": "100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllTransacitions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/transaction",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"transaction"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
